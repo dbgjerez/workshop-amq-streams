@@ -12,4 +12,3 @@ spec:
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   startingCSV: amqstreams.v1.8.3
-

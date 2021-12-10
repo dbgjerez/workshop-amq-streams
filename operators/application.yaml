@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: amq-streams-operator
+spec:
+  destination:
+    name: ''
+    namespace: openshift-operators
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: amq-streams
+    repoURL: 'https://github.com/dbgjerez/kafka-gitops'
+    targetRevision: HEAD
+  project: operators
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
