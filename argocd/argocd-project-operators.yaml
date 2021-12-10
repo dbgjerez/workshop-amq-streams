@@ -3,4 +3,9 @@ kind: AppProject
 metadata:
   name: operators
   namespace: openshift-gitops
-spec: {}
+spec: 
+  destinations:
+  - namespace: 'openshift-operators'
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://github.com/dbgjerez/kafka-gitops
