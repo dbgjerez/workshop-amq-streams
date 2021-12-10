@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: amq-streams-operator
+  name: bootstrap-cluster
 spec:
   destination:
     name: ''
     namespace: openshift-operators
     server: 'https://kubernetes.default.svc'
   source:
-    path: operators
+    path: argocd
     repoURL: 'https://github.com/dbgjerez/kafka-gitops'
     targetRevision: HEAD
-  project: operators
+  project: default
   syncPolicy:
     automated:
       prune: false
