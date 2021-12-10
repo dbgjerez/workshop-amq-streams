@@ -8,7 +8,7 @@ spec:
     namespace: openshift-gitops
     server: 'https://kubernetes.default.svc'
   source:
-    path: argocd
+    path: argocd/bootstrap
     repoURL: 'https://github.com/dbgjerez/kafka-gitops'
     targetRevision: HEAD
   project: default
