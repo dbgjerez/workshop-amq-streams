@@ -5,7 +5,7 @@ on:
     branches:
     - master
 env:
-  SITE_DIR: "gh-pages"
+  SITE_DIR: "doc-gh-pages/gh-pages"
 jobs:
   build_site:
     name: "Build site with Antora"
