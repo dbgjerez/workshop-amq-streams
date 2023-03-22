@@ -1,0 +1,39 @@
+= Data streaming
+include::_attributes.adoc[]
+
+[#simple]
+== Simple data
+// TODO write about a simple text for example
+
+[#sendsimpledata]
+=== Send plain text
+// TODO write about how send plain text and the quarkus examples in another repository
+
+[#receivesimpledata]
+=== Receive plain text
+// TODO
+
+[#json]
+== JSON data
+// TODO write about a JSON strcutre data
+
+[#sendjson]
+=== Send JSON
+// TODO 
+
+[#receivejson]
+=== Receive JSON
+// TODO
+
+[#avro]
+== Avro schemes
+// TODO write about a JSON strcutre data
+
+* xref:04-data.adoc[4. Data]
+** xref:04-data.adoc#simple[Simple data]
+*** xref:04-data.adoc#sendsimpledata[Send plain text]
+*** xref:04-data.adoc#receivesimpledata[Receive plain text]
+** xref:04-data.adoc#json[JSON]
+*** xref:04-data.adoc#sendjson[Send JSON]
+*** xref:04-data.adoc#receivejson[Receive JSON]
+** xref:04-data.adoc#avro[Avro scheme]

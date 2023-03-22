@@ -1,0 +1,11 @@
+= Welcome to AMQ Streams Workshop
+:page-layout: home
+:!sectids:
+
+[.text-center.strong]
+== Kafka
+
+Red Hat Kafka solution workshop
+
+
+

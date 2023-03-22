@@ -1,0 +1,7 @@
+= Introduction
+include::_attributes.adoc[]
+
+[#architecture]
+== Architecture
+
+// TODO talk about Kafka architecture and use an image

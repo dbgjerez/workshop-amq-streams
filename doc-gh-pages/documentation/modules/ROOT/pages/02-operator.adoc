@@ -1,0 +1,7 @@
+= Operator
+include::_attributes.adoc[]
+
+[#installation]
+== Installation
+
+// TODO: talk about how to install the operator. We can use an image of operator HUB and gitops model with the Subscription object

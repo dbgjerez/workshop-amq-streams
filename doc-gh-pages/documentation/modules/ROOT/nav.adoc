@@ -1,0 +1,23 @@
+* xref:01-introduction.adoc[1. Introduction]
+** xref:01-introduction.adoc#architecture[Architecture]
+
+* xref:02-operator.adoc[2. Operator]
+** xref:02-operator.adoc#installation[Installation]
+
+* xref:03-components.adoc[3. Kafka components]
+** xref:03-components.adoc#cluster[Deploy a Cluster]
+** xref:03-components.adoc#topic[Deploy a Topic]
+** xref:03-components.adoc#user[Deploy a User]
+
+* xref:04-data.adoc[4. Data]
+** xref:04-data.adoc#simple[Simple data]
+*** xref:04-data.adoc#sendsimpledata[Send plain text]
+*** xref:04-data.adoc#receivesimpledata[Receive plain text]
+** xref:04-data.adoc#json[JSON]
+*** xref:04-data.adoc#sendjson[Send JSON]
+*** xref:04-data.adoc#receivejson[Receive JSON]
+** xref:04-data.adoc#avro[Avro scheme]
+
+* xref:05-monitoring.adoc[5. Monitoring]
+
+* xref:06-security.adoc[6. Security]

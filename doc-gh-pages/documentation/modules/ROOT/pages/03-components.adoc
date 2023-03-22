@@ -1,0 +1,11 @@
+= Components
+include::_attributes.adoc[]
+
+[#cluster]
+== Kafka Cluster
+
+[#topic]
+== Kafka Topic
+
+[#user]
+== Kafka User
