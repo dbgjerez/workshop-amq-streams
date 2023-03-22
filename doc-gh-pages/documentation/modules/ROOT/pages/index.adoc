@@ -6,6 +6,3 @@
 == Kafka
 
 Red Hat Kafka solution workshop
-
-
-
