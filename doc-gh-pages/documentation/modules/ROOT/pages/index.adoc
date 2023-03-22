@@ -1,11 +1,11 @@
-= Welcome to Service Mesh Workshop
+= Welcome to AMQ Streams Workshop
 :page-layout: home
 :!sectids:
 
 [.text-center.strong]
-== Manage a Service Mesh Architecture
+== Kafka
 
-A Service Mesh tutorial based on Red Hat Service Mesh and Istio.
+Red Hat Kafka solution workshop
 
 
 

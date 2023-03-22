@@ -1,4 +1,0 @@
-= Observability
-include::_attributes.adoc[]
-
-// TODO
