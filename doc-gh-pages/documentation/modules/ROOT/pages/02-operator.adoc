@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 == Installation
 
 [Abstract]
-In this first lab, we will install the AMQ Streams operator
+In this lab, we will install the AMQ Streams operator. 
 
 Prerequisites: 
 
@@ -22,7 +22,7 @@ The operator will be deployed using the descriptor:
 [source, yaml]
 include::https://raw.githubusercontent.com/dbgjerez/amq-streams-workshop/master/operator/amq-streams-operator.yaml[]
 
-To apply the file, we will use the oc client installing on the namespace "openshift-operators".
+To apply the file, we will use the oc client to apply it on the namespace "openshift-operators".
 
 ....
 oc apply -f operators/amq-streams-operator.yaml -n openshift-operators 
@@ -31,12 +31,12 @@ oc apply -f operators/amq-streams-operator.yaml -n openshift-operators
 Now, we will check the status of the operators: 
 ....
 oc get subscription -n openshift-operators
-	NAME                  PACKAGE                     SOURCE             CHANNEL
-amq-streams           amq-streams                 redhat-operators   amq-streams-1.8.x
+NAMESPACE             NAME          PACKAGE       SOURCE             CHANNEL
+openshift-operators   amq-streams   amq-streams   redhat-operators   amq-streams-2.3.x
 ....
 
-How we can see the operator is installed and ready to be used.
+How we can see, the operator is installed and ready to be used.
 
-If we would using GitOps, specifically ArgoCD, we will see this picture:
+If we have used the GitOps way, specifically ArgoCD, we will see this picture:
 
 image:argo-amq-subscription.png[Install Operator]
