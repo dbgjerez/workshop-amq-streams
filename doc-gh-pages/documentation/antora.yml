@@ -1,5 +1,5 @@
-name: workshop-service-mesh-doc
-title: Service Mesh workshop
+name: workshop-amq-streams
+title: AMQ Streams
 version: master
 nav:
   - modules/ROOT/nav.adoc
