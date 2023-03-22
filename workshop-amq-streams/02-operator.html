@@ -184,7 +184,82 @@
 <div class="sect1">
 <h2 id="installation"><a class="anchor" href="#installation"></a>Installation</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>In this first lab, we will install the AMQ Streams operator</p>
+</div>
+<div class="paragraph">
+<p>Prerequisites:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An OCP cluster</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Goals:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Install operator</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab10_installation"><a class="anchor" href="#_lab10_installation"></a>1. <strong>Lab10 - Installation</strong></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The operator will be deployed using the descriptor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  labels:
+    operators.coreos.com/amq-streams.openshift-operators: ""
+  name: amq-streams
+  namespace: openshift-operators
+spec:
+  channel: amq-streams-1.8.x
+  installPlanApproval: Automatic
+  name: amq-streams
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: amqstreams.v1.8.3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To apply the file, we will use the oc client installing on the namespace "openshift-operators".</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>oc apply -f operators/amq-streams-operator.yaml -n openshift-operators</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we will check the status of the operators:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>oc get subscription -n openshift-operators
+	NAME                  PACKAGE                     SOURCE             CHANNEL
+amq-streams           amq-streams                 redhat-operators   amq-streams-1.8.x</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>How we can see the operator is installed and ready to be used.</p>
+</div>
+<div class="paragraph">
+<p>If we would using GitOps, specifically ArgoCD, we will see this picture:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/argo-amq-subscription.png" alt="Install Operator"></span></p>
+</div>
 </div>
 </div>
 <nav class="pagination">
