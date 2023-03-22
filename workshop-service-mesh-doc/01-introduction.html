@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Setup :: Workshop Service Mesh</title>
+    <title>Introduction :: Workshop Service Mesh</title>
     <link rel="canonical" href="https://github.com/dbgjerez/workshop-amq-streams/workshop-service-mesh-doc/01-introduction.html">
     <link rel="prev" href="index.html">
-    <link rel="next" href="02-concepts.html">
+    <link rel="next" href="02-operator.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -76,105 +76,72 @@
     <a class="nav-link" href="01-introduction.html">1. Introduction</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#prerequisite">Prerequisites</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#k8s">Local installation</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#ocp">Openshift</a>
+    <a class="nav-link" href="#architecture">Architecture</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="02-concepts.html">2. Concepts</a>
+    <a class="nav-link" href="02-operator.html">2. Operator</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-concepts.html#architecture">Architecture</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-concepts.html#components">Components</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02-concepts.html#objects">Istio objects</a>
+    <a class="nav-link" href="02-operator.html#installation">Installation</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="03-setup.html">3. Setup</a>
+    <a class="nav-link" href="03-components.html">3. Kafka components</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-setup.html#operator">Operator</a>
+    <a class="nav-link" href="03-components.html#cluster">Deploy a Cluster</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03-setup.html#helm">Helm</a>
+    <a class="nav-link" href="03-components.html#topic">Deploy a Topic</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-components.html#user">Deploy a User</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="04-applications.html">4. Applications</a>
+    <a class="nav-link" href="04-data.html">4. Data</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-applications.html#demo">Demo architecture</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04-applications.html#routing">Routing</a>
-  </li>
-  <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="04-applications.html#newversion">New application version</a>
+    <a class="nav-link" href="04-data.html#simple">Simple data</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-applications.html#bluegreen">Blue/Green</a>
+    <a class="nav-link" href="04-data.html#sendsimpledata">Send plain text</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="04-applications.html#canary">Canary</a>
+    <a class="nav-link" href="04-data.html#receivesimpledata">Receive plain text</a>
   </li>
 </ul>
   </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="05-traffic-management.html">5. Traffic Management</a>
+    <a class="nav-link" href="04-data.html#json">JSON</a>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="05-traffic-management.html#timeouts">Timeouts</a>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-data.html#sendjson">Send JSON</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="04-data.html#receivejson">Receive JSON</a>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="05-traffic-management.html#retries">Retries</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="05-traffic-management.html#circuitbreaker">Circuit breaker</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="05-traffic-management.html#faultinjection">Fault ijection</a>
+    <a class="nav-link" href="04-data.html#avro">Avro scheme</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="05-monitoring.html">5. Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="06-security.html">6. Security</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="06-security.html#mtls">Mutual TLS</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="06-security.html#authentication">Authentication</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="06-security.html#authorization">Authorization</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="07-observability.html">7. Observability</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="08-extensibility.html">8. Extensibility</a>
   </li>
 </ul>
   </li>
@@ -214,71 +181,16 @@
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Setup</h1>
+<h1 class="page">Introduction</h1>
 <div class="sect1">
-<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>Prerequisite CLI tools</h2>
+<h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Cli like oc, kubectl, minikube, crc, helm, etc</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="k8s"><a class="anchor" href="#k8s"></a>Setup Kubernetes</h2>
-<div class="sectionbody">
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_minikube"></a>Minikube</p>
-</li>
-<li>
-<p><a id="tabset1_openshift-crc"></a>OpenShift CRC</p>
-</li>
-<li>
-<p><a id="tabset1_openshift"></a>OpenShift</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_minikube">
-<div class="paragraph">
-<p>Minikube installation</p>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_openshift-crc">
-<div class="paragraph">
-<p>Openshift CRC installation</p>
-</div>
-</div>
-<div class="tab-pane" aria-labelledby="tabset1_openshift">
-<div class="paragraph">
-<p>Openshift installed</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="sources"><a class="anchor" href="#sources"></a>Get workshop sources</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Git url, etc</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="documentation"><a class="anchor" href="#documentation"></a>Official documentation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Include documentation of official sites like Istio, Kubernetes, Red Hat, etc.</p>
-</div>
+
 </div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html" class="query-params-link">Service Mesh workshop</a></span>
-  <span class="next"><a href="02-concepts.html" class="query-params-link">2. Concepts</a></span>
+  <span class="next"><a href="02-operator.html" class="query-params-link">2. Operator</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
