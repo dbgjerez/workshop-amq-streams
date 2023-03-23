@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Introduction :: Workshop Service Mesh</title>
-    <link rel="canonical" href="https://github.com/dbgjerez/workshop-amq-streams/workshop-amq-streams/01-introduction.html">
-    <link rel="prev" href="index.html">
-    <link rel="next" href="02-operator.html">
+    <title>Monitoring :: Workshop Service Mesh</title>
+    <link rel="canonical" href="https://github.com/dbgjerez/workshop-amq-streams/workshop-amq-streams/07-monitoring.html">
+    <link rel="prev" href="06-data.html">
+    <link rel="next" href="08-security.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -71,12 +71,12 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="01-introduction.html">1. Introduction</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#architecture">Architecture</a>
+    <a class="nav-link" href="01-introduction.html#architecture">Architecture</a>
   </li>
 </ul>
   </li>
@@ -131,7 +131,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="07-monitoring.html">7. Monitoring</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -167,65 +167,18 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">AMQ Streams</a></li>
-    <li><a href="01-introduction.html">1. Introduction</a></li>
+    <li><a href="07-monitoring.html">7. Monitoring</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/dbgjerez/workshop-amq-streams/edit/master/doc-gh-pages/documentation/modules/ROOT/pages/01-introduction.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/dbgjerez/workshop-amq-streams/edit/master/doc-gh-pages/documentation/modules/ROOT/pages/07-monitoring.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Introduction</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p><span class="image"><img src="_images/kafka-components.png" alt="Kafka components"></span></p>
-</div>
-<div class="paragraph">
-<p>The main components in a Kafka architecture:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Broker:</strong> node that orchestrates the storage and passing of messages.</p>
-</li>
-<li>
-<p><strong>Kafka Cluster:</strong> group of broker instances.</p>
-</li>
-<li>
-<p><strong>ZooKeeper:</strong> core dependency for Kafka that provides a cluster coordination service, storing and tracking the status of brokers and consumers. It&#8217;s also used for controller elections.</p>
-</li>
-<li>
-<p><strong>Kafka Connect:</strong> integration toolkit for streaming data between Kafka brokers and other systems. Kafka Connect provides a framework to integrate Kafka with an external data source such as a database. A connector is a plugin composed by:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Source to extract the data from a source.</p>
-</li>
-<li>
-<p>Sink to store the data into a Kafka topic.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Kafka MirrorMaker:</strong> replicates data between two Kafka clusters, within or across data centers.</p>
-</li>
-<li>
-<p><strong>Kafka Exporter:</strong> extracts data for analysis.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
-<div class="sectionbody">
+<h1 class="page">Monitoring</h1>
 
-</div>
-</div>
 <nav class="pagination">
-  <span class="prev"><a href="index.html" class="query-params-link">AMQ Streams</a></span>
-  <span class="next"><a href="02-operator.html" class="query-params-link">2. Operator</a></span>
+  <span class="prev"><a href="06-data.html" class="query-params-link">6. Data</a></span>
+  <span class="next"><a href="08-security.html" class="query-params-link">8. Security</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

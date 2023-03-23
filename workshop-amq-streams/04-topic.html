@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Introduction :: Workshop Service Mesh</title>
-    <link rel="canonical" href="https://github.com/dbgjerez/workshop-amq-streams/workshop-amq-streams/01-introduction.html">
-    <link rel="prev" href="index.html">
-    <link rel="next" href="02-operator.html">
+    <title>Kafka Topic :: Workshop Service Mesh</title>
+    <link rel="canonical" href="https://github.com/dbgjerez/workshop-amq-streams/workshop-amq-streams/04-topic.html">
+    <link rel="prev" href="03-cluster.html">
+    <link rel="next" href="05-user.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -71,12 +71,12 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="01-introduction.html">1. Introduction</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#architecture">Architecture</a>
+    <a class="nav-link" href="01-introduction.html#architecture">Architecture</a>
   </li>
 </ul>
   </li>
@@ -92,7 +92,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="03-cluster.html">3. Kafka Cluster</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="04-topic.html">4. Kafka Topic</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -167,65 +167,181 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">AMQ Streams</a></li>
-    <li><a href="01-introduction.html">1. Introduction</a></li>
+    <li><a href="04-topic.html">4. Kafka Topic</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/dbgjerez/workshop-amq-streams/edit/master/doc-gh-pages/documentation/modules/ROOT/pages/01-introduction.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/dbgjerez/workshop-amq-streams/edit/master/doc-gh-pages/documentation/modules/ROOT/pages/04-topic.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Introduction</h1>
+<h1 class="page">Kafka Topic</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="image"><img src="_images/kafka-components.png" alt="Kafka components"></span></p>
+<p>These labs pretend to introduce about the topic concept in Kafka.</p>
 </div>
 <div class="paragraph">
-<p>The main components in a Kafka architecture:</p>
+<p>Prerequisites:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Broker:</strong> node that orchestrates the storage and passing of messages.</p>
-</li>
-<li>
-<p><strong>Kafka Cluster:</strong> group of broker instances.</p>
-</li>
-<li>
-<p><strong>ZooKeeper:</strong> core dependency for Kafka that provides a cluster coordination service, storing and tracking the status of brokers and consumers. It&#8217;s also used for controller elections.</p>
-</li>
-<li>
-<p><strong>Kafka Connect:</strong> integration toolkit for streaming data between Kafka brokers and other systems. Kafka Connect provides a framework to integrate Kafka with an external data source such as a database. A connector is a plugin composed by:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Source to extract the data from a source.</p>
-</li>
-<li>
-<p>Sink to store the data into a Kafka topic.</p>
+<p>AMQ Streams operator installed</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Goals:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Kafka topic concepts</p>
 </li>
 <li>
-<p><strong>Kafka MirrorMaker:</strong> replicates data between two Kafka clusters, within or across data centers.</p>
-</li>
-<li>
-<p><strong>Kafka Exporter:</strong> extracts data for analysis.</p>
+<p>How to create a topic</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p><strong>Kafka cluster</strong> works as a group of <strong>brokers</strong>.</p>
+</div>
+<div class="paragraph">
+<p>The data is stored in <strong>Topics</strong>. Each topic has one or many partitions where the data is distributed.</p>
+</div>
+<div class="paragraph">
+<p>A <strong>partition</strong> has a data subset of the topic. Thanks to this, the data processing can be parallelized.</p>
+</div>
+<div class="paragraph">
+<p>Another important point is the <strong>replication factor</strong>. When a topic is divided in partitions, we earn the ability of parallelization, but we need high availability in most cases. With the replication factor, we indicate to Kafka how many times this partition should be replicated along the brokers. These replications are not productive, they are followers of the main that only work in case of fail in the partition leader.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/kafka-concepts-key-concepts.png" alt="How to Kafka operate">
+</div>
+</div>
+<div class="paragraph">
+<p>To deploy a topic we have to apply a <strong>KafkaTopic</strong> descriptor. The descriptor shows like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: simple-topic-demo
+  labels:
+    strimzi.io/cluster: kafka-cluster-demo
+spec:
+  config:
+    # 60m * 60s * 1000ms = 1h
+    retention.ms: 3600000
+    # 1gb
+    segment.bytes: 1073741824
+  partitions: 1
+  replicas: 2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can see a lot of important configuration points:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>config.retention.ms:</strong> represents the time before the data is deleted</p>
+</li>
+<li>
+<p><strong>config.segment.bytes:</strong> controls the segment file size for the log</p>
+</li>
+<li>
+<p><strong>partitions:</strong> number of partitions of the topic</p>
+</li>
+<li>
+<p><strong>replicas:</strong> number of replicas in each partition</p>
+</li>
+<li>
+<p><strong>topicName:</strong> name of the topic when the client connects inside the cluster</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To deploy the topic is needed a cluster. We&#8217;re going to reuse the cluster used to explain the Kafka clusters.</p>
+</div>
+<div class="paragraph">
+<p>We recreate it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f content/components/kafka-cluster/kafka-cluster-demo.yaml -n $OCP_NS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can wait while the operator is starting up:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get kafka -w
+NAME                 DESIRED KAFKA REPLICAS   DESIRED ZK REPLICAS   READY   WARNINGS
+kafka-cluster-demo   3                        3
+kafka-cluster-demo   3                        3                     True</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, once the cluster is up, we can deploy the topic:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f content/components/kafka-topic/kafka-simple-topic.yaml -n $OCP_NS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can ask for it with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get kafkatopic -n $OCP_NS simple-topic-demo
+NAME                CLUSTER              PARTITIONS   REPLICATION FACTOR   READY
+simple-topic-demo   kafka-cluster-demo   1            2                    True</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, the topic is ready to receive and send the data.</p>
+</div>
+<div class="paragraph">
+<p>If we enter inside a Kafka broker container, we can navigate to the filesystem when the topic is created and his data is stored.</p>
+</div>
+<div class="paragraph">
+<p>To list the brokers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get po -n $OCP_NS | grep demo-kafka | awk '{print $1}'
+kafka-cluster-demo-kafka-0
+kafka-cluster-demo-kafka-1
+kafka-cluster-demo-kafka-2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To enter inside and list the filesystem:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc exec -it -n $OCP_NS kafka-cluster-demo-kafka-0 ls /var/lib/kafka/data/kafka-log0/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As we indicated the replica value=2 and the partition=1, we can see the topic only in 2 brokers.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
+<h2 id="user"><a class="anchor" href="#user"></a>Kafka User</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="index.html" class="query-params-link">AMQ Streams</a></span>
-  <span class="next"><a href="02-operator.html" class="query-params-link">2. Operator</a></span>
+  <span class="prev"><a href="03-cluster.html" class="query-params-link">3. Kafka Cluster</a></span>
+  <span class="next"><a href="05-user.html" class="query-params-link">5. Kafka User</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Introduction :: Workshop Service Mesh</title>
-    <link rel="canonical" href="https://github.com/dbgjerez/workshop-amq-streams/workshop-amq-streams/01-introduction.html">
-    <link rel="prev" href="index.html">
-    <link rel="next" href="02-operator.html">
+    <title>Data streaming :: Workshop Service Mesh</title>
+    <link rel="canonical" href="https://github.com/dbgjerez/workshop-amq-streams/workshop-amq-streams/06-data.html">
+    <link rel="prev" href="05-user.html">
+    <link rel="next" href="07-monitoring.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
 <link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
@@ -71,12 +71,12 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="01-introduction.html">1. Introduction</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="#architecture">Architecture</a>
+    <a class="nav-link" href="01-introduction.html#architecture">Architecture</a>
   </li>
 </ul>
   </li>
@@ -98,36 +98,36 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="05-user.html">5. Kafka User</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="06-data.html">6. Data</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="06-data.html#simple">Simple data</a>
+    <a class="nav-link" href="#simple">Simple data</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="06-data.html#sendsimpledata">Send plain text</a>
+    <a class="nav-link" href="#sendsimpledata">Send plain text</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="06-data.html#receivesimpledata">Receive plain text</a>
+    <a class="nav-link" href="#receivesimpledata">Receive plain text</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="06-data.html#json">JSON</a>
+    <a class="nav-link" href="#json">JSON</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="06-data.html#sendjson">Send JSON</a>
+    <a class="nav-link" href="#sendjson">Send JSON</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="06-data.html#receivejson">Receive JSON</a>
+    <a class="nav-link" href="#receivejson">Receive JSON</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="06-data.html#avro">Avro scheme</a>
+    <a class="nav-link" href="#avro">Avro scheme</a>
   </li>
 </ul>
   </li>
@@ -167,65 +167,88 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">AMQ Streams</a></li>
-    <li><a href="01-introduction.html">1. Introduction</a></li>
+    <li><a href="06-data.html">6. Data</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/dbgjerez/workshop-amq-streams/edit/master/doc-gh-pages/documentation/modules/ROOT/pages/01-introduction.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/dbgjerez/workshop-amq-streams/edit/master/doc-gh-pages/documentation/modules/ROOT/pages/06-data.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Introduction</h1>
-<div id="preamble">
+<h1 class="page">Data streaming</h1>
+<div class="sect1">
+<h2 id="simple"><a class="anchor" href="#simple"></a>Simple data</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p><span class="image"><img src="_images/kafka-components.png" alt="Kafka components"></span></p>
+<div class="sect2">
+<h3 id="sendsimpledata"><a class="anchor" href="#sendsimpledata"></a>Send plain text</h3>
+
 </div>
-<div class="paragraph">
-<p>The main components in a Kafka architecture:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Broker:</strong> node that orchestrates the storage and passing of messages.</p>
-</li>
-<li>
-<p><strong>Kafka Cluster:</strong> group of broker instances.</p>
-</li>
-<li>
-<p><strong>ZooKeeper:</strong> core dependency for Kafka that provides a cluster coordination service, storing and tracking the status of brokers and consumers. It&#8217;s also used for controller elections.</p>
-</li>
-<li>
-<p><strong>Kafka Connect:</strong> integration toolkit for streaming data between Kafka brokers and other systems. Kafka Connect provides a framework to integrate Kafka with an external data source such as a database. A connector is a plugin composed by:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Source to extract the data from a source.</p>
-</li>
-<li>
-<p>Sink to store the data into a Kafka topic.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><strong>Kafka MirrorMaker:</strong> replicates data between two Kafka clusters, within or across data centers.</p>
-</li>
-<li>
-<p><strong>Kafka Exporter:</strong> extracts data for analysis.</p>
-</li>
-</ul>
+<div class="sect2">
+<h3 id="receivesimpledata"><a class="anchor" href="#receivesimpledata"></a>Receive plain text</h3>
+
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="architecture"><a class="anchor" href="#architecture"></a>Architecture</h2>
+<h2 id="json"><a class="anchor" href="#json"></a>JSON data</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="sendjson"><a class="anchor" href="#sendjson"></a>Send JSON</h3>
+
+</div>
+<div class="sect2">
+<h3 id="receivejson"><a class="anchor" href="#receivejson"></a>Receive JSON</h3>
 
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="avro"><a class="anchor" href="#avro"></a>Avro schemes</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#04-data.adoc" class="xref unresolved">4. Data</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#04-data.adoc#simple" class="xref unresolved">Simple data</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#04-data.adoc#sendsimpledata" class="xref unresolved">Send plain text</a></p>
+</li>
+<li>
+<p><a href="#04-data.adoc#receivesimpledata" class="xref unresolved">Receive plain text</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="#04-data.adoc#json" class="xref unresolved">JSON</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#04-data.adoc#sendjson" class="xref unresolved">Send JSON</a></p>
+</li>
+<li>
+<p><a href="#04-data.adoc#receivejson" class="xref unresolved">Receive JSON</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="#04-data.adoc#avro" class="xref unresolved">Avro scheme</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
 <nav class="pagination">
-  <span class="prev"><a href="index.html" class="query-params-link">AMQ Streams</a></span>
-  <span class="next"><a href="02-operator.html" class="query-params-link">2. Operator</a></span>
+  <span class="prev"><a href="05-user.html" class="query-params-link">5. Kafka User</a></span>
+  <span class="next"><a href="07-monitoring.html" class="query-params-link">7. Monitoring</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
