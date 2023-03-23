@@ -1,0 +1,95 @@
+= Kafka Topic
+
+These labs pretend to introduce about the topic concept in Kafka.
+
+Prerequisites: 
+
+- AMQ Streams operator installed
+
+Goals:
+
+- Kafka topic concepts
+- How to create a topic
+
+**Kafka cluster** works as a group of **brokers**. 
+
+The data is stored in **Topics**. Each topic has one or many partitions where the data is distributed. 
+
+A **partition** has a data subset of the topic. Thanks to this, the data processing can be parallelized. 
+
+Another important point is the **replication factor**. When a topic is divided in partitions, we earn the ability of parallelization, but we need high availability in most cases. With the replication factor, we indicate to Kafka how many times this partition should be replicated along the brokers. These replications are not productive, they are followers of the main that only work in case of fail in the partition leader.
+
+image::kafka-concepts-key-concepts.png[How to Kafka operate]
+
+To deploy a topic we have to apply a **KafkaTopic** descriptor. The descriptor shows like: 
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/components/kafka-topic/kafka-simple-topic.yaml[]
+
+We can see a lot of important configuration points:
+
+- **config.retention.ms:** represents the time before the data is deleted
+- **config.segment.bytes:** controls the segment file size for the log
+- **partitions:** number of partitions of the topic
+- **replicas:** number of replicas in each partition
+- **topicName:** name of the topic when the client connects inside the cluster
+
+To deploy the topic is needed a cluster. We're going to reuse the cluster used to explain the Kafka clusters.
+
+We recreate it: 
+
+[source, bash]
+....
+oc apply -f content/components/kafka-cluster/kafka-cluster-demo.yaml -n $OCP_NS
+....
+
+We can wait while the operator is starting up: 
+
+[source, bash]
+....
+oc get kafka -w
+NAME                 DESIRED KAFKA REPLICAS   DESIRED ZK REPLICAS   READY   WARNINGS
+kafka-cluster-demo   3                        3                             
+kafka-cluster-demo   3                        3                     True
+....
+
+Now, once the cluster is up, we can deploy the topic: 
+
+[source, bash]
+....
+oc apply -f content/components/kafka-topic/kafka-simple-topic.yaml -n $OCP_NS
+....
+
+We can ask for it with the following command: 
+
+[source, bash]
+....
+oc get kafkatopic -n $OCP_NS simple-topic-demo
+NAME                CLUSTER              PARTITIONS   REPLICATION FACTOR   READY
+simple-topic-demo   kafka-cluster-demo   1            2                    True
+....
+
+Now, the topic is ready to receive and send the data. 
+
+If we enter inside a Kafka broker container, we can navigate to the filesystem when the topic is created and his data is stored. 
+
+To list the brokers:
+[source, bash]
+....
+oc get po -n $OCP_NS | grep demo-kafka | awk '{print $1}'
+kafka-cluster-demo-kafka-0
+kafka-cluster-demo-kafka-1
+kafka-cluster-demo-kafka-2
+....
+
+To enter inside and list the filesystem:
+
+[source, bash]
+....
+oc exec -it -n $OCP_NS kafka-cluster-demo-kafka-0 ls /var/lib/kafka/data/kafka-log0/
+....
+
+As we indicated the replica value=2 and the partition=1, we can see the topic only in 2 brokers.
+
+[#user]
+== Kafka User
