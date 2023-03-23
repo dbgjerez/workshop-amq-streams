@@ -86,7 +86,8 @@ Now, we need to manage users and resources to decide who can access to what.
 The operator facilities this action, using the KafkaUser descriptor we can create users and asign acls. 
 
 [source, yaml]
-include::https://raw.githubusercontent.com/dbgjerez/amq-streams-workshop/master/user/dborrego.yaml[]
+include::content/security/user...[]
+// TODO user description in folder
 
 In the following sections, we will create an application to connect and work with Kafka. 
 

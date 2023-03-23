@@ -1,0 +1,17 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: dborrego
+  labels:
+    strimzi.io/cluster: demotls
+spec:
+  authentication:
+    type: tls
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: books
+          patternType: literal
+        operation: Write
