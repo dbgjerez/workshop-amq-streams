@@ -175,8 +175,6 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Kafka Topic</h1>
-<div id="preamble">
-<div class="sectionbody">
 <div class="paragraph">
 <p>These labs pretend to introduce about the topic concept in Kafka.</p>
 </div>
@@ -331,12 +329,22 @@ kafka-cluster-demo-kafka-2</code></pre>
 <div class="paragraph">
 <p>As we indicated the replica value=2 and the partition=1, we can see the topic only in 2 brokers.</p>
 </div>
+<div class="paragraph">
+<p>At this point, we have examined the topic and we don&#8217;t need it, so we can delete it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete kafkatopic simple-topic-demo -n $OCP_NS
+kafkatopic.kafka.strimzi.io "simple-topic-demo" deleted</code></pre>
 </div>
 </div>
-<div class="sect1">
-<h2 id="user"><a class="anchor" href="#user"></a>Kafka User</h2>
-<div class="sectionbody">
-
+<div class="paragraph">
+<p>And also the cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete kafka kafka-cluster-demo -n $OCP_NS
+kafka.kafka.strimzi.io "kafka-cluster-demo" deleted</code></pre>
 </div>
 </div>
 <nav class="pagination">
