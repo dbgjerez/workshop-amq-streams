@@ -20,7 +20,7 @@ Goals:
 The operator will be deployed using the descriptor: 
 
 [source, yaml]
-include::https://raw.githubusercontent.com/dbgjerez/amq-streams-workshop/master/operator/amq-streams-operator.yaml[]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/develop/content/operator/amq-streams-operator.yaml[]
 
 To apply the file, we will use the oc client to apply it on the namespace "openshift-operators".
 
