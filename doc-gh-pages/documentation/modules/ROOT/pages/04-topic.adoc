@@ -91,5 +91,18 @@ oc exec -it -n $OCP_NS kafka-cluster-demo-kafka-0 ls /var/lib/kafka/data/kafka-l
 
 As we indicated the replica value=2 and the partition=1, we can see the topic only in 2 brokers.
 
-[#user]
-== Kafka User
+At this point, we have examined the topic and we don't need it, so we can delete it:
+
+[source, bash]
+....
+oc delete kafkatopic simple-topic-demo -n $OCP_NS
+kafkatopic.kafka.strimzi.io "simple-topic-demo" deleted
+....
+
+And also the cluster: 
+
+[source, bash]
+....
+oc delete kafka kafka-cluster-demo -n $OCP_NS
+kafka.kafka.strimzi.io "kafka-cluster-demo" deleted
+....
