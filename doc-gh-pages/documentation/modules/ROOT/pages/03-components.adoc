@@ -16,6 +16,89 @@ The main components in a Kafka architecture:
 
 [#cluster]
 == Kafka Cluster
+In this lab, we'll create our first AMQ Streams cluster. 
+
+Prerequisites: 
+
+- AMQ Streams operator installed
+
+Goals:
+
+- Understand what is a Kafka Cluster
+- Be able to manage a cluster
+
+If we would like to install a Kafka cluster without a Strimzi operator, we must install and configure each component of the architecture. 
+
+Thanks to the operator, the installation is easy, we only have to understand how to configure it.
+
+The descriptor used to deploy a Kafka cluster is **Kafka** and we can see an example here: 
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/components/kafka-cluster/kafka-cluster-demo.yaml[]
+
+The most important parts to understand now: 
+
+- **listeners:** connection endpoints that can be used by the applications
+- **replicas:** the number of replications for kafka brokers or ZooKeeper instances.
+- **storage:** in this case is ephemeral, but it can be a persistent-claim
+
+For this laboratory, we'll use a namespaced called "kafka-components", so to facilitate the operation, we can create the project and assign the value to a variable:
+
+[source, bash]
+....
+OCP_NS=kafka-components
+oc create namespace $OCP_NS
+....
+
+And we can use the new project as default project: 
+[source, bash]
+....
+oc project $OCP_NS
+....
+
+
+Now, we'll start up a cluster. To do it, we apply the previous Kafka definition:
+
+[source, bash]
+....
+❯ oc apply -f content/components/kafka-cluster/kafka-cluster-demo.yaml -n $OCP_NS
+....
+
+The cluster provisioning may take some minutes as some pieces have to be configured. 
+
+After some minutes, the cluster is ready to be used.
+
+[source, bash]
+....
+oc get po -n $OCP_NS
+NAME                                                 READY   STATUS    RESTARTS   AGE
+kafka-cluster-demo-entity-operator-c9ccdddb7-7bmpr   3/3     Running   0          46s
+kafka-cluster-demo-kafka-0                           1/1     Running   0          70s
+kafka-cluster-demo-kafka-1                           1/1     Running   0          70s
+kafka-cluster-demo-kafka-2                           1/1     Running   0          70s
+kafka-cluster-demo-zookeeper-0                       1/1     Running   0          103s
+kafka-cluster-demo-zookeeper-1                       1/1     Running   0          103s
+kafka-cluster-demo-zookeeper-2                       1/1     Running   0          103s
+....
+
+It's very important to understand why is running some pods. There are 6 because we had indicated the replica of Zookeeper and Kafka to value 3. 
+
+In addition, we can consult our running clusters: 
+
+[source, bash]
+....
+oc get kafka
+NAME                 DESIRED KAFKA REPLICAS   DESIRED ZK REPLICAS   READY   WARNINGS
+kafka-cluster-demo   3                        3                     True    
+....
+
+Once the cluster is up and running, we will delete it:
+
+[source, bash]
+....
+oc delete kafka kafka-cluster-demo -n $OCP_NS
+kafka.kafka.strimzi.io "kafka-cluster-demo" deleted
+....
 
 [#topic]
 == Kafka Topic
