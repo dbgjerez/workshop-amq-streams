@@ -1,2 +1,121 @@
 = Security
 include::_attributes.adoc[]
+
+== Cluster public expose
+
+Expose a Kafka Cluster within OCP it is easy thanks to the routes. 
+
+The Kafka descriptor has a part to indicate the different listener to access the cluster. We can see that previously has been indicated two:
+
+[source, yaml]
+....
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+....
+
+This definition adds two internal listeners that will be used by the applications deployed inside the cluster.
+
+In this lab, we will add another listener to access from outside the cluster and secure the endpoint.
+
+To add the desired configuration, we will add the following listener:
+
+[source, yaml]
+....
+    listeners:
+      ...
+      - name: routetls
+        port: 9094
+        type: route
+        tls: true
+        authentication:
+          type: tls
+....
+
+In addition, has been added a configuration to manage the authentication in the following lab.
+
+The descriptor to apply is something similar to: 
+
+[source, yaml]
+include::kafka-cluster-public-tls.yaml[]
+//TODO referenciar con la url correspondiente a este repositorio
+
+The following step is to apply the configuration:
+
+[source, bash]
+....
+❯ oc apply -f cluster/public-tls/kafka-cluster-tls.yaml -n $OCP_NS
+kafka.kafka.strimzi.io/demotls created
+....
+
+In this case will be created the same number of pods:
+
+[source, bash]
+....
+❯ oc -n $OCP_NS get po   
+NAME                                       READY   STATUS    RESTARTS   AGE
+demotls-entity-operator-76d454ddbd-qf8xd   3/3     Running   0          37s
+demotls-kafka-0                            1/1     Running   0          59s
+demotls-zookeeper-0                        1/1     Running   0          82s
+....
+
+Also, the main difference is the routes that have been created:
+
+[source, bash]
+....
+❯ oc -n $OCP_NS get route
+NAME                               HOST/PORT                                                                                PATH   SERVICES                           PORT   TERMINATION   WILDCARD
+demotls-kafka-routetls-0           demotls-kafka-routetls-0-dborrego-ns.apps.cluster-b359.sandbox1272.opentlc.com                  demotls-kafka-routetls-0           9094   passthrough   None
+demotls-kafka-routetls-bootstrap   demotls-kafka-routetls-bootstrap-dborrego-ns.apps.cluster-b359.sandbox1272.opentlc.com          demotls-kafka-routetls-bootstrap   9094   passthrough   None
+....
+
+It is very important that the type will be passthrough as the certificate is managed by the cluster
+
+== Users
+// TODO, talk about tls and acls
+In this point, the cluster is up, and we can access from internet within TLS secure connection. 
+
+Now, we need to manage users and resources to decide who can access to what. 
+
+The operator facilities this action, using the KafkaUser descriptor we can create users and asign acls. 
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/amq-streams-workshop/master/user/dborrego.yaml[]
+
+In the following sections, we will create an application to connect and work with Kafka. 
+
+We will need the cluster certificates and users credentials. We can see that after create the user, a secret will be created. This secret will be used by us when we will deploy applications. 
+
+To apply the user, firstly rename it and change the name of the user inside the file. 
+
+[source, bash]
+....
+❯ oc apply -f user/dborrego.yaml -n $OCP_NS
+....
+
+The user will be created after a few seconds:
+
+[source, bash]
+....
+❯ oc get KafkaUser -n $OCP_NS
+NAME       CLUSTER   AUTHENTICATION   AUTHORIZATION   READY
+dborrego   demo      tls              simple  
+....
+
+Another point important is checking that the secret has been created: 
+
+[source, bash]
+....
+❯ oc get secret -n $OCP_NS dborrego
+NAME       TYPE     DATA   AGE
+dborrego   Opaque   5      35s
+....
+
+Now, the user have been created and it is ready to be used.
+
