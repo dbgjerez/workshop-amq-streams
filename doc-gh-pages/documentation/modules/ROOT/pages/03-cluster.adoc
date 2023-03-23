@@ -1,21 +1,6 @@
-= Components
+= Kafka Cluster
 include::_attributes.adoc[]
 
-image:kafka-components.png[Kafka components]
-
-The main components in a Kafka architecture:
-
-- **Broker:** node that orchestrates the storage and passing of messages.
-- **Kafka Cluster:** group of broker instances.
-- **ZooKeeper:** core dependency for Kafka that provides a cluster coordination service, storing and tracking the status of brokers and consumers. It's also used for controller elections. 
-- **Kafka Connect:** integration toolkit for streaming data between Kafka brokers and other systems. Kafka Connect provides a framework to integrate Kafka with an external data source such as a database. A connector is a plugin composed by:
-    * Source to extract the data from a source.
-    * Sink to store the data into a Kafka topic. 
-- **Kafka MirrorMaker:** replicates data between two Kafka clusters, within or across data centers.
-- **Kafka Exporter:** extracts data for analysis. 
-
-[#cluster]
-== Kafka Cluster
 In this lab, we'll create our first AMQ Streams cluster. 
 
 Prerequisites: 
