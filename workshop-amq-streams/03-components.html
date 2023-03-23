@@ -181,10 +181,205 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Components</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><img src="_images/kafka-components.png" alt="Kafka components"></span></p>
+</div>
+<div class="paragraph">
+<p>The main components in a Kafka architecture:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Broker:</strong> node that orchestrates the storage and passing of messages.</p>
+</li>
+<li>
+<p><strong>Kafka Cluster:</strong> group of broker instances.</p>
+</li>
+<li>
+<p><strong>ZooKeeper:</strong> core dependency for Kafka that provides a cluster coordination service, storing and tracking the status of brokers and consumers. It&#8217;s also used for controller elections.</p>
+</li>
+<li>
+<p><strong>Kafka Connect:</strong> integration toolkit for streaming data between Kafka brokers and other systems. Kafka Connect provides a framework to integrate Kafka with an external data source such as a database. A connector is a plugin composed by:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Source to extract the data from a source.</p>
+</li>
+<li>
+<p>Sink to store the data into a Kafka topic.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Kafka MirrorMaker:</strong> replicates data between two Kafka clusters, within or across data centers.</p>
+</li>
+<li>
+<p><strong>Kafka Exporter:</strong> extracts data for analysis.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="cluster"><a class="anchor" href="#cluster"></a>Kafka Cluster</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>In this lab, we&#8217;ll create our first AMQ Streams cluster.</p>
+</div>
+<div class="paragraph">
+<p>Prerequisites:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>AMQ Streams operator installed</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Goals:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Understand what is a Kafka Cluster</p>
+</li>
+<li>
+<p>Be able to manage a cluster</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If we would like to install a Kafka cluster without a Strimzi operator, we must install and configure each component of the architecture.</p>
+</div>
+<div class="paragraph">
+<p>Thanks to the operator, the installation is easy, we only have to understand how to configure it.</p>
+</div>
+<div class="paragraph">
+<p>The descriptor used to deploy a Kafka cluster is <strong>Kafka</strong> and we can see an example here:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: kafka-cluster-demo
+spec:
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+  kafka:
+    version: 3.3.1
+    config:
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      default.replication.factor: 3
+      min.insync.replicas: 2
+      inter.broker.protocol.version: '3.3'
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+    replicas: 3
+    storage:
+      type: ephemeral
+  zookeeper:
+    replicas: 3
+    storage:
+      type: ephemeral</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The most important parts to understand now:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>listeners:</strong> connection endpoints that can be used by the applications</p>
+</li>
+<li>
+<p><strong>replicas:</strong> the number of replications for kafka brokers or ZooKeeper instances.</p>
+</li>
+<li>
+<p><strong>storage:</strong> in this case is ephemeral, but it can be a persistent-claim</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For this laboratory, we&#8217;ll use a namespaced called "kafka-components", so to facilitate the operation, we can create the project and assign the value to a variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">OCP_NS=kafka-components
+oc create namespace $OCP_NS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And we can use the new project as default project:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project $OCP_NS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we&#8217;ll start up a cluster. To do it, we apply the previous Kafka definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">❯ oc apply -f content/components/kafka-cluster/kafka-cluster-demo.yaml -n $OCP_NS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The cluster provisioning may take some minutes as some pieces have to be configured.</p>
+</div>
+<div class="paragraph">
+<p>After some minutes, the cluster is ready to be used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get po -n $OCP_NS
+NAME                                                 READY   STATUS    RESTARTS   AGE
+kafka-cluster-demo-entity-operator-c9ccdddb7-7bmpr   3/3     Running   0          46s
+kafka-cluster-demo-kafka-0                           1/1     Running   0          70s
+kafka-cluster-demo-kafka-1                           1/1     Running   0          70s
+kafka-cluster-demo-kafka-2                           1/1     Running   0          70s
+kafka-cluster-demo-zookeeper-0                       1/1     Running   0          103s
+kafka-cluster-demo-zookeeper-1                       1/1     Running   0          103s
+kafka-cluster-demo-zookeeper-2                       1/1     Running   0          103s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It&#8217;s very important to understand why is running some pods. There are 6 because we had indicated the replica of Zookeeper and Kafka to value 3.</p>
+</div>
+<div class="paragraph">
+<p>In addition, we can consult our running clusters:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get kafka
+NAME                 DESIRED KAFKA REPLICAS   DESIRED ZK REPLICAS   READY   WARNINGS
+kafka-cluster-demo   3                        3                     True</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the cluster is up and running, we will delete it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete kafka kafka-cluster-demo -n $OCP_NS
+kafka.kafka.strimzi.io "kafka-cluster-demo" deleted</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
