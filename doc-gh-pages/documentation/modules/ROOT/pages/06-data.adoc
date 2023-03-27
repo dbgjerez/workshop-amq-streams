@@ -5,11 +5,13 @@ We talked about Kafka topic concept in a previous session. Now it's time to send
 
 We must understand the consumer, producer and consumer groups to discuss the streaming data concept. 
 
+[#producersandconsumers]
 == Producers and consumers
 
 The following image shows a topic structure:
 
 image::topic-structure.png[Topic structure]
+
 
 
 [#simple]

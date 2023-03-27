@@ -11,6 +11,8 @@
 * xref:05-user.adoc[5. Kafka User]
 
 * xref:06-data.adoc[6. Data streaming]
+
+** xref:06-data.adoc#producersandconsumers[Producers and consumers]
 ** xref:06-data.adoc#simple[Simple data]
 *** xref:06-data.adoc#sendsimpledata[Send plain text]
 *** xref:06-data.adoc#receivesimpledata[Receive plain text]
