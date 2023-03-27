@@ -18,6 +18,8 @@ image::topic-producer.png[Topic producer]
 
 The **consumer** is the application that receives the data from a topic partition. More than one application forms a **consumer group**.
 
+image::topic-consumer-group.png[Topic consumer group]
+
 A consumer group works as a unique functional unit, so the **offset** is unique for each. 
 
 
