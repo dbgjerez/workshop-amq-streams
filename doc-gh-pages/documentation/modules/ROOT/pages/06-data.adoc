@@ -1,6 +1,10 @@
 = Data streaming
 include::_attributes.adoc[]
 
+We talked about Kafka topic concept in a previous session. Now it's time to send and receive data from a topic. 
+
+We must understand the consumer, producer and consumer groups to discuss the streaming data concept. 
+
 [#simple]
 == Simple data
 // TODO write about a simple text for example
