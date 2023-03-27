@@ -12,6 +12,14 @@ The following image shows a topic structure:
 
 image::topic-structure.png[Topic structure]
 
+A **producer** is an application that sends data to a topic. If a topic has more than one **partition**, Kafka balances it along the partitions. Also, each partition is replicated along the Kafka brokers depending on the replica factor number, although our application always writes the data in the leader partition. 
+
+image::topic-producer.png[Topic producer]
+
+The **consumer** is the application that receives the data from a topic partition. More than one application forms a **consumer group**.
+
+A consumer group works as a unique functional unit, so the **offset** is unique for each. 
+
 
 
 [#simple]
