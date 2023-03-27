@@ -22,7 +22,7 @@ image::topic-consumer-group.png[Topic consumer group]
 
 A consumer group works as a unique functional unit, so the **offset** is unique for each. 
 
-
+The **offset** is a point of the latest element consumed by a consumer group. One advantage of using Kafka is that if you modify the offset, the data can be reprocessed. 
 
 [#simple]
 == Simple data
