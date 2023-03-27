@@ -24,6 +24,14 @@ A consumer group works as a unique functional unit, so the **offset** is unique 
 
 The **offset** is a point of the latest element consumed by a consumer group. One advantage of using Kafka is that if you modify the offset, the data can be reprocessed. 
 
+These concepts are essential to have an optimized Kafka architecture. If we think of an optimal architecture, the ideal scenario would be to have the same number of partitions in a topic as applications in each consumer group. 
+
+If we have more applications than partitions, some applications will do nothing. Oppositely, if we have more partitions than applications, the process won't be parallelized. 
+
+The following image shows two optimized consumer groups with different offsets. 
+
+image::topic-two-consumer-group.png[Topic two consumer groups]
+
 [#simple]
 == Simple data
 // TODO write about a simple text for example
