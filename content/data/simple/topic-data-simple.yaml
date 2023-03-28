@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
 metadata:
-  name: books-dborrego
+  name: books
   labels:
     strimzi.io/cluster: data-simple-cluster
 spec:

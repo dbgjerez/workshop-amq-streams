@@ -34,7 +34,7 @@ spec:
       containers:
       - env:
         - name: mp.messaging.outgoing.books-new.topic
-          value: {{ .Values.topic.name }}-{{ .Values.user.name }}
+          value: {{ .Values.topic.name }}
         - name: KAFKA_BOOTSTRAP_SERVERS
           value: {{ .Values.cluster.url }}
         - name: KAFKA_SSL_KEYSTORE_LOCATION

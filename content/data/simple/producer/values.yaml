@@ -2,12 +2,12 @@ cluster:
   name: data-simple-cluster
   url: no-default-value
 user:
-  name: user
+  name: no-default-value
 image:
   name: quay.io/dborrego/simple-kafka-producer
   version: "1.0"
 topic:
-  name: books-dborrego
+  name: books
   partitions: 1
   replicas: 1
 replicas: 1
