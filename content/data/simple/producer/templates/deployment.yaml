@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-producer-{{ .Values.user.name }}
+    app.kubernetes.io/component: kafka-producer-{{ .Values.user.name }}
+    app.kubernetes.io/instance: kafka-producer-{{ .Values.user.name }}
+  name: kafka-producer-{{ .Values.user.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      deployment: kafka-producer-{{ .Values.user.name }}
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+      labels:
+        deployment: kafka-producer-{{ .Values.user.name }}
+    spec:
+      volumes:
+      - name: kafkatls
+        secret: 
+          secretName: {{ .Values.cluster.name }}-cluster-ca-cert
+          items:
+          - key: ca.p12
+            path: kafka-certificate.p12
+      - name: usertls
+        secret: 
+          secretName: kafka-producer-{{ .Values.user.name }}
+          items: 
+          - key: user.p12
+            path: user-certificate.p12
+      containers:
+      - env:
+        - name: mp.messaging.outgoing.books-new.topic
+          value: {{ .Values.topic.name }}-{{ .Values.user.name }}
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: {{ .Values.cluster.url }}
+        - name: KAFKA_SSL_KEYSTORE_LOCATION
+          value: /certs/user/user-certificate.p12
+        - name: KAFKA_SSL_KEYSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: kafka-producer-{{ .Values.user.name }}
+              key: user.password
+        - name: KAFKA_SSL_TRUSTSTORE_LOCATION
+          value: /certs/kafka/kafka-certificate.p12
+        - name: KAFKA_SSL_TRUSTSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.cluster.name }}-cluster-ca-cert
+              key: ca.password
+        image: {{ .Values.image.name }}:{{ .Values.image.version }}
+        name: quarkus-simple-producer-{{ .Values.user.name }}
+        volumeMounts:
+        - name: kafkatls
+          mountPath: "/certs/kafka"
+          readOnly: true
+        - name: usertls
+          mountPath: "/certs/user"
+          readOnly: true
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
