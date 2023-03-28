@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - demo-data-simple.yaml
   - demo-data-simple-producer.yaml
+  - demo-data-simple-consumer.yaml
