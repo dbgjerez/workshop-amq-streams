@@ -3,7 +3,7 @@ kind: KafkaUser
 metadata:
   name: kafka-producer-{{ .Values.user.name }}
   labels:
-    strimzi.io/cluster: { { .Values.cluster.name } }
+    strimzi.io/cluster: {{ .Values.cluster.name }}
 spec:
   authentication:
     type: tls
@@ -12,7 +12,7 @@ spec:
     acls:
       - resource:
           type: topic
-          name: { { .Values.topic.name } }
+          name: {{ .Values.topic.name }}
           patternType: literal
         operations:
           - Write
