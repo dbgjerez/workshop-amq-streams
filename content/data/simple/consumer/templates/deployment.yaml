@@ -40,7 +40,7 @@ spec:
         - name: mp.messaging.incoming.books-new.group.id
           value: cg-simple-kafka-consumer
         - name: mp.messaging.incoming.books-new.topic
-          value: {{ .Values.topic.name }}-{{ .Values.user.name }}
+          value: {{ .Values.topic.name }}
         - name: KAFKA_BOOTSTRAP_SERVERS
           value: {{ .Values.cluster.url }}
         - name: KAFKA_SSL_KEYSTORE_LOCATION
