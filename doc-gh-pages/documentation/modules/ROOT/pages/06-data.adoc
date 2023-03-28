@@ -45,7 +45,72 @@ Also, we'll deploy a topic and users.
 [#sendsimpledata]
 === Send plain text
 
-The application that sends the data to Kafka is: https://github.com/dbgjerez/quarkus-kafka/tree/main/simple-kafka-producer
+Kafka works with serialized data, in this first lab we are going to send information as a string. This is the easiest way to send information, but also it is usually an ineffective way to work, as we often work with structured data. 
+
+What do we need to send information to a topic?
+
+* **Kafka cluster:** Cluster where create the topic and send the data. 
+* **Application:** Kafka provides a lot of libraries to work in the most popular programming languages, in this case we've used Java 17 with Quarkus. 
+* **Topic:** we'll create a topic to send the information. 
+* **Kafka user: ** user with enough roles to write in the specific topic.
+
+.Kafka Cluster
+
+For this example, we'll create a simple cluster with internal and TLS security communication:
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/data/simple/cluster-data-simple.yaml[]
+
+And we can use ArgoCD or apply it directly:
+
+[source, yaml]
+....
+oc apply -f content/data/simple/cluster-data-simple.yaml -n demo-data-simple
+....
+
+.Topic
+
+It's very important to create a topic with the correct configuration. In this case, we are only going to see how to send data to it, so we only need one partition without a replica. 
+
+The definition is here: 
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/data/simple/topic-data-simple.yaml[]
+
+Once we've applied the Kafka cluster definition, we can create the topic in similar way: 
+
+[source, yaml]
+....
+oc apply -f content/data/simple/topic-data-simple.yaml -n demo-data-simple
+....
+
+.User
+
+The next important step is to create the user who the application is going to use. This user needs enough roles to write in the previous topic. 
+
+This is the corresponding definition, also we can see more about roles and acls in the security section:
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/data/simple/producer/templates/producer-user.yaml[]
+
+> NOTE: I've used Helm to deploy the applications, so you can see some variable placeholders which are overrides in deploy time by ArgoCD. 
+
+The user will be created at the same time that the application is in the following step. 
+
+.Application
+
+Quarkus facilities the way to develop a native application container. The application that sends the data to Kafka is: https://github.com/dbgjerez/quarkus-kafka/tree/main/simple-kafka-producer
+
+At this point, we must create some pieces: the deployment, service and user. 
+
+I usually use ArgoCD and Helm to the facility for this step. If you can't use it, you can render the Helm chart with the following command: 
+
+[source, yaml]
+....
+helm template -f demo.values.yaml -n demo-data-simple data/simple/producer | oc apply -f -
+....
+
+It's essential to understand the security, if we inspect the deployment file, we can see references to the secrets which contain the Kafka cluster certificates. 
 
 
 

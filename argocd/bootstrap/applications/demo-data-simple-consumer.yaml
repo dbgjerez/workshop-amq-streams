@@ -5,8 +5,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    name: ""
-    namespace: openshift-gitops
+    namespace: demo-data-simple
     server: "https://kubernetes.default.svc"
   source:
     path: content/data/simple/consumer
