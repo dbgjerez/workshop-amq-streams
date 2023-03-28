@@ -38,7 +38,7 @@ spec:
         - name: mp.messaging.incoming.books-new.lag
           value: "1000"
         - name: mp.messaging.incoming.books-new.group.id
-          value: cg-{{ .Values.user.name }}
+          value: cg-simple-kafka-consumer
         - name: mp.messaging.incoming.books-new.topic
           value: {{ .Values.topic.name }}-{{ .Values.user.name }}
         - name: KAFKA_BOOTSTRAP_SERVERS

@@ -10,13 +10,17 @@ spec:
   authorization:
     type: simple
     acls:
-      - operation: Read
-        resource:
-          name: cg-{{ .Values.user.name }}
+      - resource:
+          name: cg-simple-kafka-consumer
           patternType: literal
           type: group
-      - operation: Read
-        resource:
-          name: {{ .Values.topic.name }}-{{ .Values.user.name }}
+        operations: 
+          - Read
+        host: "*"
+      - resource:
+          name: {{ .Values.topic.name }}
           patternType: literal
           type: topic
+        operations: 
+          - Read
+        host: "*"

@@ -1,11 +1,12 @@
 cluster: 
-  name: demotls
-  url: demotls-kafka-routetls-bootstrap-kafka.apps.cluster-8e0c.sandbox1784.opentlc.com:443
+  name: data-simple-cluster
+  url: no-default-value
 user:
   name: user
+image: 
+  name: quay.io/dborrego/simple-kafka-consumer
+  version: "1.0"
 topic:
   name: books
-image: 
-  name: b0rr3g0/quarkus-simple-kafka-consumer
-  version: 0.3
 lag: 1000
+replicas: 1
