@@ -1,0 +1,11 @@
+cluster: 
+  name: demotls
+  url: demotls-kafka-routetls-bootstrap-kafka.apps.cluster-8e0c.sandbox1784.opentlc.com:443
+user:
+  name: user
+topic:
+  name: books
+image: 
+  name: b0rr3g0/quarkus-simple-kafka-consumer
+  version: 0.3
+lag: 1000

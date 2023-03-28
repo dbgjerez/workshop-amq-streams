@@ -1,0 +1,22 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: kafka-consumer-{{ .Values.user.name }}
+  labels:
+    strimzi.io/cluster: {{ .Values.cluster.name }}
+spec:
+  authentication:
+    type: tls
+  authorization:
+    type: simple
+    acls:
+      - operation: Read
+        resource:
+          name: cg-{{ .Values.user.name }}
+          patternType: literal
+          type: group
+      - operation: Read
+        resource:
+          name: {{ .Values.topic.name }}-{{ .Values.user.name }}
+          patternType: literal
+          type: topic

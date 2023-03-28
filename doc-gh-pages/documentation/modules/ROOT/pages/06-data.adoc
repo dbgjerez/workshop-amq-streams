@@ -34,11 +34,20 @@ image::topic-two-consumer-group.png[Topic two consumer groups]
 
 [#simple]
 == Simple data
-// TODO write about a simple text for example
+Once, we've yet learned about Kafka concepts, it's time to play with it. 
+
+We can work with many data types in Kafka, in this example, we're going to show the simplest way to work with simple text data. 
+
+To do it, we need an application. We can use a lot of languages and frameworks, in this case, we're going to use Quarkus and Java 17. 
+
+Also, we'll deploy a topic and users.
 
 [#sendsimpledata]
 === Send plain text
-// TODO write about how send plain text and the quarkus examples in another repository
+
+The application that sends the data to Kafka is: https://github.com/dbgjerez/quarkus-kafka/tree/main/simple-kafka-producer
+
+
 
 [#receivesimpledata]
 === Receive plain text

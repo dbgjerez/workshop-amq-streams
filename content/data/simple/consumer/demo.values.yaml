@@ -1,0 +1,8 @@
+cluster:
+  name: demotls
+  url: demotls-kafka-routetls-bootstrap-kafka.apps.cluster-b359.sandbox1272.opentlc.com:443
+user:
+  name: dborrego
+image:
+  version: "1.0"
+replicas: 1

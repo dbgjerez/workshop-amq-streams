@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-consumer-{{ .Values.user.name }}
+    app.kubernetes.io/component: kafka-consumer-{{ .Values.user.name }}
+    app.kubernetes.io/instance: kafka-consumer-{{ .Values.user.name }}
+  name: kafka-consumer-{{ .Values.user.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      deployment: kafka-consumer-{{ .Values.user.name }}
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+      labels:
+        deployment: kafka-consumer-{{ .Values.user.name }}
+    spec:
+      volumes:
+      - name: kafkatls
+        secret: 
+          secretName: {{ .Values.cluster.name }}-cluster-ca-cert
+          items:
+          - key: ca.p12
+            path: kafka-certificate.p12
+      - name: usertls
+        secret: 
+          secretName: kafka-consumer-{{ .Values.user.name }}
+          items: 
+          - key: user.p12
+            path: user-certificate.p12
+      containers:
+      - env:
+        - name: quarkus.vertx.max-event-loop-execute-time
+          value: "10000000000"
+        - name: mp.messaging.incoming.books-new.lag
+          value: "1000"
+        - name: mp.messaging.incoming.books-new.group.id
+          value: cg-{{ .Values.user.name }}
+        - name: mp.messaging.incoming.books-new.topic
+          value: {{ .Values.topic.name }}-{{ .Values.user.name }}
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: {{ .Values.cluster.url }}
+        - name: KAFKA_SSL_KEYSTORE_LOCATION
+          value: /certs/user/user-certificate.p12
+        - name: KAFKA_SSL_KEYSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: kafka-consumer-{{ .Values.user.name }}
+              key: user.password
+        - name: KAFKA_SSL_TRUSTSTORE_LOCATION
+          value: /certs/kafka/kafka-certificate.p12
+        - name: KAFKA_SSL_TRUSTSTORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.cluster.name }}-cluster-ca-cert
+              key: ca.password
+        image: {{ .Values.image.name }}:{{ .Values.image.version }}
+        name: quarkus-simple-consumer-{{ .Values.user.name }}
+        volumeMounts:
+        - name: kafkatls
+          mountPath: "/certs/kafka"
+          readOnly: true
+        - name: usertls
+          mountPath: "/certs/user"
+          readOnly: true
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+  
