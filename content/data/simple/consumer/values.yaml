@@ -1,0 +1,12 @@
+cluster: 
+  name: data-simple-cluster
+  url: no-default-value
+user:
+  name: user
+image: 
+  name: quay.io/dborrego/simple-kafka-consumer
+  version: "1.0"
+topic:
+  name: books
+lag: 1000
+replicas: 1

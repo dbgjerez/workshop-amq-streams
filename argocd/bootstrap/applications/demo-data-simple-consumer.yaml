@@ -1,17 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bootstrap
+  name: demo-data-simple-consumer
   namespace: openshift-gitops
 spec:
   destination:
-    name: ""
-    namespace: openshift-gitops
+    namespace: demo-data-simple
     server: "https://kubernetes.default.svc"
   source:
-    path: argocd/bootstrap/applications
+    path: content/data/simple/consumer
     repoURL: "https://github.com/dbgjerez/workshop-amq-streams"
     targetRevision: 7-data-simple-producer-and-receiver
+    helm:
+      valueFiles:
+        - "demo.values.yaml"
   project: default
   syncPolicy:
     automated:

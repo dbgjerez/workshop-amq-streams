@@ -1,0 +1,7 @@
+cluster:
+  url: data-simple-cluster-kafka-bootstrap:9093
+user:
+  name: dborrego
+image:
+  version: "1.0"
+replicas: 1
