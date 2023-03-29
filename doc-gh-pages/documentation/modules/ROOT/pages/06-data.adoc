@@ -77,7 +77,7 @@ The definition is here:
 [source, yaml]
 include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/data/simple/topic-data-simple.yaml[]
 
-Once we've applied the Kafka cluster definition, we can create the topic in similar way: 
+Once we've applied the Kafka cluster definition, we can similarly create the topic: 
 
 [source, yaml]
 ....
@@ -146,11 +146,3 @@ The following step is to consume the messages.
 == Avro schemes
 // TODO write about a JSON strcutre data
 
-* xref:04-data.adoc[4. Data]
-** xref:04-data.adoc#simple[Simple data]
-*** xref:04-data.adoc#sendsimpledata[Send plain text]
-*** xref:04-data.adoc#receivesimpledata[Receive plain text]
-** xref:04-data.adoc#json[JSON]
-*** xref:04-data.adoc#sendjson[Send JSON]
-*** xref:04-data.adoc#receivejson[Receive JSON]
-** xref:04-data.adoc#avro[Avro scheme]
