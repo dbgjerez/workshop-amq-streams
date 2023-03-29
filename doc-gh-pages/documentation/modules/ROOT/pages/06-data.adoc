@@ -114,7 +114,7 @@ It's essential to understand the security, if we inspect the deployment file, we
 
 The following picture shows all the objects created by the Helm chart:
 
-image:data-simple-producer.png[Simple producer]
+image:data-simple-consumer.png[Simple producer]
 
 If we consult the application logs in debug mode, we can see how the application is sending messages to the topic.
 
@@ -128,7 +128,47 @@ The following step is to consume the messages.
 
 [#receivesimpledata]
 === Receive plain text
-// TODO
+
+This step is very similar to the previous one, as the cluster and topic have been deployed yet, we will just deploy the application consumer and a user. 
+
+This application is a listener over a topic. The idea is to read the data that the previous application is sending to the topic. 
+
+.User
+
+This user needs enough roles to read the topic and roles to use the Consumer Group.
+
+This is the corresponding definition, also we can see more about roles and acls in the security section:
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/data/simple/consumer/templates/consumer-user.yaml[]
+
+> NOTE: I've used Helm to deploy the applications, so you can see some variable placeholders which are overrides in deploy time by ArgoCD. 
+
+The user will be created at the same time that the application is in the following step. 
+
+.Application
+
+The application that we're going to use, has been programmed using Quarkus too. In summary, the process is very similar to what we've used in the producer application. 
+
+I usually use ArgoCD and Helm to the facility for this step. If you can't use it, you can render the Helm chart with the following command: 
+
+[source, yaml]
+....
+helm template -f demo.values.yaml -n demo-data-simple data/simple/consumer | oc apply -f -
+....
+
+If you use ArgoCD, you can see easily the objects created by the chart:
+
+image:data/data-simple-consumer.png[Simple consumer]
+
+If we consult the application logs in info mode, we can see how the application is consuming the messages that the producer is sending.
+
+[source]
+....
+2023-03-29 06:58:02,300 INFO  [io.dbo.ser.BookConsumer] (vert.x-eventloop-thread-0) Book[ title: The Lord of the Rings, Pages: 47 ]
+....
+
+Now, we can play with the partitions to show how the consumer group actuates over the topic.
 
 [#json]
 == JSON data
