@@ -143,7 +143,7 @@ It's essential to understand the security, if we inspect the deployment file, we
 
 The following picture shows all the objects created by the Helm chart:
 
-image:data-simple-consumer.png[Simple producer]
+image:data/data-simple-consumer.png[Simple producer]
 
 If we consult the application logs in debug mode, we can see how the application is sending messages to the topic.
 
