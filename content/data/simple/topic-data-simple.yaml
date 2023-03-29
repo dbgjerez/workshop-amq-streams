@@ -1,0 +1,14 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: books
+  labels:
+    strimzi.io/cluster: data-simple-cluster
+spec:
+  config:
+    # 60m * 60s * 1000ms = 1h
+    retention.ms: 3600000
+    # 1gb
+    segment.bytes: 1073741824
+  partitions: 1
+  replicas: 1

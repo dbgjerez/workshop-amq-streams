@@ -1,0 +1,13 @@
+cluster:
+  name: data-simple-cluster
+  url: no-default-value
+user:
+  name: no-default-value
+image:
+  name: quay.io/dborrego/simple-kafka-producer
+  version: "1.0"
+topic:
+  name: books
+replicas: 1
+log:
+  level: INFO
