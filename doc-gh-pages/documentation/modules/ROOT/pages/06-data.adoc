@@ -63,9 +63,29 @@ include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/
 
 And we can use ArgoCD or apply it directly:
 
-[source, yaml]
+[source, bash]
 ....
 oc apply -f content/data/simple/cluster-data-simple.yaml -n demo-data-simple
+....
+
+And we can see the pods:
+
+[source, bash]
+....
+oc get po -n demo-data-simple
+NAME                                                   READY   STATUS    RESTARTS   AGE
+data-simple-cluster-entity-operator-6ddbc94d65-bb6vm   3/3     Running   0          96m
+data-simple-cluster-kafka-0                            1/1     Running   0          97m
+data-simple-cluster-zookeeper-0                        1/1     Running   0          97m
+....
+
+We can wait for the Kafka cluster to stay ready:
+
+[source, bash]
+....
+oc get kafka
+NAME                  DESIRED KAFKA REPLICAS   DESIRED ZK REPLICAS   READY   WARNINGS
+data-simple-cluster   1                        1                     True    True
 ....
 
 .Topic
@@ -79,9 +99,18 @@ include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/
 
 Once we've applied the Kafka cluster definition, we can similarly create the topic: 
 
-[source, yaml]
+[source, bash]
 ....
 oc apply -f content/data/simple/topic-data-simple.yaml -n demo-data-simple
+....
+
+We can wait for the ready status:
+
+[source, bash]
+....
+oc get kafkatopic books
+NAME    CLUSTER               PARTITIONS   REPLICATION FACTOR   READY
+books   data-simple-cluster   1            1                    True
 ....
 
 .User
@@ -105,7 +134,7 @@ At this point, we must create some pieces: the deployment, service and user.
 
 I usually use ArgoCD and Helm to the facility for this step. If you can't use it, you can render the Helm chart with the following command: 
 
-[source, yaml]
+[source, bash]
 ....
 helm template -f demo.values.yaml -n demo-data-simple data/simple/producer | oc apply -f -
 ....
@@ -152,7 +181,7 @@ The application that we're going to use, has been programmed using Quarkus too. 
 
 I usually use ArgoCD and Helm to the facility for this step. If you can't use it, you can render the Helm chart with the following command: 
 
-[source, yaml]
+[source, bash]
 ....
 helm template -f demo.values.yaml -n demo-data-simple data/simple/consumer | oc apply -f -
 ....
