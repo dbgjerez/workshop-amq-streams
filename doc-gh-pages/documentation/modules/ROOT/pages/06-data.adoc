@@ -42,6 +42,12 @@ To do it, we need an application. We can use a lot of languages and frameworks, 
 
 Also, we'll deploy a topic and users.
 
+> NOTE: The fastest way to deploy this demo section is using ArgoCD, all the information can be found here: https://github.com/dbgjerez/workshop-amq-streams/tree/master/argocd[https://github.com/dbgjerez/workshop-amq-streams/tree/master/argocd]. 
+
+As an important point, this is not mandatory, but by using it, you'll can see something similar to: 
+
+image::data/demo-data-simple-apps.png[ArgoCD]
+
 [#sendsimpledata]
 === Send plain text
 
