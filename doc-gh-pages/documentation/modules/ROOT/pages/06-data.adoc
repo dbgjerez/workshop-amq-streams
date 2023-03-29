@@ -112,7 +112,19 @@ helm template -f demo.values.yaml -n demo-data-simple data/simple/producer | oc 
 
 It's essential to understand the security, if we inspect the deployment file, we can see references to the secrets which contain the Kafka cluster certificates. 
 
+The following picture shows all the objects created by the Helm chart:
 
+image:data-simple-producer.png[Simple producer]
+
+If we consult the application logs in debug mode, we can see how the application is sending messages to the topic.
+
+[source]
+....
+2023-03-29 08:15:27,789 DEBUG [io.sma.rea.mes.kafka] (executor-thread-0) SRMSG18209: Sending message org.eclipse.microprofile.reactive.messaging.Message$$Lambda$5e1799c60041209b57937765b33186671a72f6f8@252653dc to Kafka topic 'books'
+2023-03-29 08:15:27,791 DEBUG [io.sma.rea.mes.kafka] (kafka-producer-network-thread | kafka-producer-books-new) SRMSG18211: Message org.eclipse.microprofile.reactive.messaging.Message$$Lambda$5e1799c60041209b57937765b33186671a72f6f8@252653dc sent successfully to Kafka topic-partition 'books-0', with offset 4697
+....
+
+The following step is to consume the messages. 
 
 [#receivesimpledata]
 === Receive plain text
