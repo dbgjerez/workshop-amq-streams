@@ -10,4 +10,4 @@ topic:
   name: books
 replicas: 1
 log:
-  level: INFO
+  level: DEBUG
