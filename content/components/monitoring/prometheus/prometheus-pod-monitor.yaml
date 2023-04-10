@@ -63,7 +63,7 @@ spec:
         values: ["Kafka", "KafkaConnect", "KafkaConnectS2I", "KafkaMirrorMaker", "KafkaMirrorMaker2"]
   namespaceSelector:
     matchNames:
-      - amq-stream
+      - kafka
   podMetricsEndpoints:
   - path: /metrics
     port: tcp-prometheus
