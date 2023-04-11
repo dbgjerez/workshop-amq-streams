@@ -1,6 +1,143 @@
 = Monitoring
 include::_attributes.adoc[]
 
-// TODO
+Monitoring is a important topic overall when it refers to distributed or complex systems. In order to monitor AMQ Broker, it supports Prometheus metrics using Prometheus JMX exporter to convert the JMX metrics supported by Apacha Kafka and Apache Zookeeper to Prometheus metrics. This feature will help us to monitorize the cluster using Prometheus to extract and store metrics and Grafana to expose them into dashboards.
+
+[#Operators Installation]
+== Operators Installation
+
+As any Operator installation in Openshift you can installed eighter by web console or cli console, you can do it as you want, however during the lab we will use cli console.
+
+IMPORTANT: To deploy Prometheus and Grafana Operators we need to install previously an OperatorGroup to match the Operator's installation mode and the namespace. This step is describe in https://docs.openshift.com/container-platform/4.12/operators/admin/olm-adding-operators-to-cluster.html[Adding Operators to a cluster] page from https://docs.openshift.com/container-platform/4.12/welcome/index.html[OpenShift Documentation site].
 
 
+First we need deploy an OperatorGroup in the namespace where we'll deploy or install Grafana and Prometheus operators. So we can use the following descriptor:
+
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/operator/operator-group-monitoring.yaml[]
+
+Take a look and then, just apply it.
+```
+oc apply -f operator/operator-group-monitoring.yaml
+```
+
+Once the OperatorGroup has been deployed, then you can deploy Grafana and Prometheus operator subscriptions:
+
+```
+oc apply -f operator/grafana-operator.yaml -n $OCP_NS
+oc apply -f operator/prometheus-operator.yaml -n $OCP_NS
+```
+
+To ensure that all operators have been installed properly you can check it with the following command:
+
+```
+oc get csv -n $OCP_NS
+TODO: Adds command output
+```
+
+== Deploy a Kafka cluster
+
+The first step to monitoring a cluster is export metrics in order to Prometheus can extract them and stored. To achieve this the cluster must be deployed with some specific configuration parameters. In that case, the configuration required are located into ConfigMaps resources and they will be binded to the cluster configuration.
+
+So, before go on we need remove the current Kafka cluster. Once the cluster have been deleted we will create a new one with the required monitoring configuration.
+
+Let's start with the required configuration. Firstly we need to create the ConfigMap resources:
+
+```
+oc apply -n $OCP_NS -f components/monitoring/kafka/kafka-metrics-cm.yaml
+oc apply -n $OCP_NS -f components/monitoring/kafka/kafka-cruise-control-cm.yaml
+```
+
+Once configuration resources has been created, then we are going to deploy a new Kafka cluster with metrics exportation configuration, for this purpose we need to add the following code in Zookeeper and Cruise Control section:
+
+```
+metricsConfig:
+    type: jmxPrometheusExporter
+    valueFrom:
+    configMapKeyRef:
+        name: <secret>
+        key: <file>
+```
+
+Take a look to the full descriptor and then apply in the cluster:
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/operator/operator-group-monitoring.yaml[]
+
+== Deploy Prometheus
+
+We will use Prometheus to extract and gather all metric data. In order to use it, we need to create a new Prometheus instance, for that it has been provided all descriptor needed to create the required resources, so you only need apply them:
+
+```
+oc apply -n $OCP_NS -f components/monitoring/prometheus
+```
+
+Let's take a look to prometheus-pod-monitor.yaml descriptor, which define a PodMonitor resource that specifies to Prometheus where metrics will be exposed
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/prometheus/prometheus-pod-monitor.yaml[]
+
+Take special attention to podMetricsEndpoint and namespaceSelector sections, it defines here the path where metrics  and the namespace where will be exposed.
+
+After a few minutes, you can access to the Prometheus instance and check if it has receive some metrics data. To access just get route endpoint and open it up in you browser:
+
+```
+oc get route -n $OCP_NS prometheus -o template --template='{{.spec.host}}'
+```
+
+We can check if Prometheus is receiving information: Status → TSDB Status and we will see this table:
+
+image:prometheus-status.png[TSDB Status]
+
+Additionally you can check if all is fine executing the following query:
+
+image:prometheus-kafka-brokers.png[Kafka_brokers Query]
+
+
+== Deploy Grafana
+
+At this point, we are able to retrieve and store metric data but we haven't a straightforward way to visualize the information or even some way to alert if something goes wrong. Grafana is an excellent tool for these task, widely used and easy to use.
+
+Prometheus datasource configuration is allowed by Grafana, even it has a native descriptor for this purpose: 
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/grafana/grafana-datasource.yaml[]
+
+Also a Grafana instance is necessary, check it out the following descriptor:
+
+[source, yaml]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/grafana/grafana.yaml[]
+
+Once you checked the manifest, then apply them:
+```
+oc apply -n $OCP_NS -f components/monitoring/grafana/grafana-datasource.yaml
+oc apply -n $OCP_NS -f components/monitoring/grafana/grafana.yaml
+```
+
+Right now, Grafana has been deployed correctly, however we need to create some dashboards in order to show the information extracted from Prometheus in a useful way. So we are going to configure these dashboard apply the following descriptors:
+
+```
+oc apply -n $OCP_NS -f components/monitoring/grafana/dashboard
+```
+
+Now you need the Grafana URL exposed by route, so execute the following command to get it and then paste in your browser:
+
+```
+oc get route grafana-route -o template --template='{{"https://"}}{{.spec.host}}'
+```
+
+When you access into Grafana a login page show up, the credentials to access are defined in the grafana descriptor that we checked it out previously.
+
+IMPORTANT: The password for the user admin is admin1234, however we encourage to review the Grafana instance descriptor.
+
+
+Finally we can access to the differents dashboards availables (which we are created before):
+
+image:grafana-dashboards.png[Available Grafana Dashboards]
+
+For instance, go to kafka dashboard:
+
+image:grafana-kafka.png[Grafana Kafka Dashboard]
+
+In this way you can review the information easely even you can create some alert if you need or you can create as much dashboard as you need following the same way that we shows in this laboratory.
