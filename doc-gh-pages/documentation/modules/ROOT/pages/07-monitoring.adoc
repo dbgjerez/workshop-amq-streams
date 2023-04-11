@@ -33,7 +33,6 @@ To ensure that all operators have been installed properly you can check it with 
 
 ```
 oc get csv -n $OCP_NS
-TODO: Adds command output
 ```
 
 == Deploy a Kafka cluster
@@ -63,7 +62,7 @@ metricsConfig:
 Take a look to the full descriptor and then apply in the cluster:
 
 [source, yaml]
-include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/operator/operator-group-monitoring.yaml[]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/components/monitoring/kafka/public-tls-kafka-cluster.yaml[]
 
 == Deploy Prometheus
 
@@ -76,7 +75,7 @@ oc apply -n $OCP_NS -f components/monitoring/prometheus
 Let's take a look to prometheus-pod-monitor.yaml descriptor, which define a PodMonitor resource that specifies to Prometheus where metrics will be exposed
 
 [source, yaml]
-include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/prometheus/prometheus-pod-monitor.yaml[]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/components/monitoring/prometheus/prometheus-pod-monitor.yaml[]
 
 Take special attention to podMetricsEndpoint and namespaceSelector sections, it defines here the path where metrics  and the namespace where will be exposed.
 
@@ -102,12 +101,12 @@ At this point, we are able to retrieve and store metric data but we haven't a st
 Prometheus datasource configuration is allowed by Grafana, even it has a native descriptor for this purpose: 
 
 [source, yaml]
-include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/grafana/grafana-datasource.yaml[]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/components/monitoring/grafana/grafana-datasource.yaml[]
 
 Also a Grafana instance is necessary, check it out the following descriptor:
 
 [source, yaml]
-include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/grafana/grafana.yaml[]
+include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/content/components/monitoring/grafana/grafana.yaml[]
 
 Once you checked the manifest, then apply them:
 ```
