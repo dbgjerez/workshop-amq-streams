@@ -178,7 +178,245 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Monitoring</h1>
-
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Monitoring is a important topic overall when it refers to distributed or complex systems. In order to monitor AMQ Broker, it supports Prometheus metrics using Prometheus JMX exporter to convert the JMX metrics supported by Apacha Kafka and Apache Zookeeper to Prometheus metrics. This feature will help us to monitorize the cluster using Prometheus to extract and store metrics and Grafana to expose them into dashboards.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_operators_installation"><a class="anchor" href="#_operators_installation"></a>Operators Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As any Operator installation in Openshift you can installed eighter by web console or cli console, you can do it as you want, however during the lab we will use cli console.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+To deploy Prometheus and Grafana Operators we need to install previously an OperatorGroup to match the Operator&#8217;s installation mode and the namespace. This step is describe in <a href="https://docs.openshift.com/container-platform/4.12/operators/admin/olm-adding-operators-to-cluster.html">Adding Operators to a cluster</a> page from <a href="https://docs.openshift.com/container-platform/4.12/welcome/index.html">OpenShift Documentation site</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>First we need deploy an OperatorGroup in the namespace where we&#8217;ll deploy or install Grafana and Prometheus operators. So we can use the following descriptor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: monitoring-operatorgroup
+  namespace: kafka
+spec:
+  targetNamespaces:
+  - kafka</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Take a look and then, just apply it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -f operator/operator-group-monitoring.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the OperatorGroup has been deployed, then you can deploy Grafana and Prometheus operator subscriptions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -f operator/grafana-operator.yaml -n $OCP_NS
+oc apply -f operator/prometheus-operator.yaml -n $OCP_NS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To ensure that all operators have been installed properly you can check it with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc get csv -n $OCP_NS
+TODO: Adds command output</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_a_kafka_cluster"><a class="anchor" href="#_deploy_a_kafka_cluster"></a>Deploy a Kafka cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The first step to monitoring a cluster is export metrics in order to Prometheus can extract them and stored. To achieve this the cluster must be deployed with some specific configuration parameters. In that case, the configuration required are located into ConfigMaps resources and they will be binded to the cluster configuration.</p>
+</div>
+<div class="paragraph">
+<p>So, before go on we need remove the current Kafka cluster. Once the cluster have been deleted we will create a new one with the required monitoring configuration.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start with the required configuration. Firstly we need to create the ConfigMap resources:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -n $OCP_NS -f components/monitoring/kafka/kafka-metrics-cm.yaml
+oc apply -n $OCP_NS -f components/monitoring/kafka/kafka-cruise-control-cm.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once configuration resources has been created, then we are going to deploy a new Kafka cluster with metrics exportation configuration, for this purpose we need to add the following code in Zookeeper and Cruise Control section:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">metricsConfig:
+    type: jmxPrometheusExporter
+    valueFrom:
+    configMapKeyRef:
+        name: &lt;secret&gt;
+        key: &lt;file&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Take a look to the full descriptor and then apply in the cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: monitoring-operatorgroup
+  namespace: kafka
+spec:
+  targetNamespaces:
+  - kafka</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_prometheus"><a class="anchor" href="#_deploy_prometheus"></a>Deploy Prometheus</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We will use Prometheus to extract and gather all metric data. In order to use it, we need to create a new Prometheus instance, for that it has been provided all descriptor needed to create the required resources, so you only need apply them:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -n $OCP_NS -f components/monitoring/prometheus</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take a look to prometheus-pod-monitor.yaml descriptor, which define a PodMonitor resource that specifies to Prometheus where metrics will be exposed</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">404: Not Found</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Take special attention to podMetricsEndpoint and namespaceSelector sections, it defines here the path where metrics  and the namespace where will be exposed.</p>
+</div>
+<div class="paragraph">
+<p>After a few minutes, you can access to the Prometheus instance and check if it has receive some metrics data. To access just get route endpoint and open it up in you browser:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc get route -n $OCP_NS prometheus -o template --template='{{.spec.host}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can check if Prometheus is receiving information: Status → TSDB Status and we will see this table:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/prometheus-status.png" alt="TSDB Status"></span></p>
+</div>
+<div class="paragraph">
+<p>Additionally you can check if all is fine executing the following query:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/prometheus-kafka-brokers.png" alt="Kafka_brokers Query"></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_grafana"><a class="anchor" href="#_deploy_grafana"></a>Deploy Grafana</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>At this point, we are able to retrieve and store metric data but we haven&#8217;t a straightforward way to visualize the information or even some way to alert if something goes wrong. Grafana is an excellent tool for these task, widely used and easy to use.</p>
+</div>
+<div class="paragraph">
+<p>Prometheus datasource configuration is allowed by Grafana, even it has a native descriptor for this purpose:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">404: Not Found</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also a Grafana instance is necessary, check it out the following descriptor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">404: Not Found</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you checked the manifest, then apply them:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -n $OCP_NS -f components/monitoring/grafana/grafana-datasource.yaml
+oc apply -n $OCP_NS -f components/monitoring/grafana/grafana.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Right now, Grafana has been deployed correctly, however we need to create some dashboards in order to show the information extracted from Prometheus in a useful way. So we are going to configure these dashboard apply the following descriptors:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -n $OCP_NS -f components/monitoring/grafana/dashboard</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you need the Grafana URL exposed by route, so execute the following command to get it and then paste in your browser:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc get route grafana-route -o template --template='{{"https://"}}{{.spec.host}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you access into Grafana a login page show up, the credentials to access are defined in the grafana descriptor that we checked it out previously.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The password for the user admin is admin1234, however we encourage to review the Grafana instance descriptor.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Finally we can access to the differents dashboards availables (which we are created before):</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/grafana-dashboards.png" alt="Available Grafana Dashboards"></span></p>
+</div>
+<div class="paragraph">
+<p>For instance, go to kafka dashboard:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/grafana-kafka.png" alt="Grafana Kafka Dashboard"></span></p>
+</div>
+<div class="paragraph">
+<p>In this way you can review the information easely even you can create some alert if you need or you can create as much dashboard as you need following the same way that we shows in this laboratory.</p>
+</div>
+</div>
+</div>
 <nav class="pagination">
   <span class="prev"><a href="06-data.html" class="query-params-link">6. Data streaming</a></span>
   <span class="next"><a href="08-security.html" class="query-params-link">8. Security</a></span>
