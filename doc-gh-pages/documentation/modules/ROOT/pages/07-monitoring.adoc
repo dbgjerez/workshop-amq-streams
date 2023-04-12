@@ -3,6 +3,15 @@ include::_attributes.adoc[]
 
 Monitoring is a important topic overall when it refers to distributed or complex systems. In order to monitor AMQ Broker, it supports Prometheus metrics using Prometheus JMX exporter to convert the JMX metrics supported by Apacha Kafka and Apache Zookeeper to Prometheus metrics. This feature will help us to monitorize the cluster using Prometheus to extract and store metrics and Grafana to expose them into dashboards.
 
+[#Before you start]
+== Before you start
+We'r going to create a new namespace in order to use a blank environment for monitoring tasks. Execute the next following commands:
+
+```
+OCP_NS=kafka
+oc new-project $OCP_NS
+```
+
 [#Operators Installation]
 == Operators Installation
 
@@ -19,7 +28,7 @@ include::https://raw.githubusercontent.com/dbgjerez/workshop-amq-streams/master/
 
 Take a look and then, just apply it.
 ```
-oc apply -f operator/operator-group-monitoring.yaml
+oc apply -f operator/operator-group-monitoring.yaml -n $OCP_NS
 ```
 
 Once the OperatorGroup has been deployed, then you can deploy Grafana and Prometheus operator subscriptions:
@@ -140,3 +149,29 @@ For instance, go to kafka dashboard:
 image:grafana-kafka.png[Grafana Kafka Dashboard]
 
 In this way you can review the information easely even you can create some alert if you need or you can create as much dashboard as you need following the same way that we shows in this laboratory.
+
+
+== How Start With Monitoring
+
+The monitoring process is the process to gather metrics about the operations involve with the system to ensure everything functions as expected to support applications and services.
+
+So, first we need to know what we need to verify in order to assure the propertly performance of our Kafka cluster. For that purpose we show you some metrics which you can use to monitoring the cluster.
+
+=== Performance Metrics
+
+image:kafka-cpu_memory.png[Kafka Memory Resource Metrics]
+
+CPU and Memory resources are very critical metrics and it's necessary ensure that the consumption of these resources is stable. On the other hand, if the consumption begins grow, maybe it means we need to scale up the number of instances in our cluster in order to reduce this.
+
+image:messages-consumed-monitoring.png[Messages Consumed]
+
+The messages incoming is other performance metric which specify the capacity of the Kafka cluster to consume and produce messages. "Lag by Consumer Group" is an interesting metric refers to Kafka monitoring, since it notice that an problem maybe exist and we would to scale up out cluster.
+
+=== Problem Indicator Metrics
+
+For other hand, some metrics specify that error exists in the cluster rather an performance problems. In that case a quick actuation is important in order to avoid severe problems or even loss of availability.
+
+Some metrics which notice problem are "rebalanced kafka rate" or "Kafka reported disk failure rate"
+
+image:rabalanced-kafka.png[Rebalanced Kafka rate]
+image:kafka-reported-disk-fails.png[Kafka reported disk failure rate]
