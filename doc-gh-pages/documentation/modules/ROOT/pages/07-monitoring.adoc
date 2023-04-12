@@ -174,4 +174,5 @@ For other hand, some metrics specify that error exists in the cluster rather an 
 Some metrics which notice problem are "rebalanced kafka rate" or "Kafka reported disk failure rate"
 
 image:rabalanced-kafka.png[Rebalanced Kafka rate]
+
 image:kafka-reported-disk-fails.png[Kafka reported disk failure rate]
