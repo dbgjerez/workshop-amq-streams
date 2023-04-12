@@ -171,8 +171,8 @@ The messages incoming is other performance metric which specify the capacity of 
 
 For other hand, some metrics specify that error exists in the cluster rather an performance problems. In that case a quick actuation is important in order to avoid severe problems or even loss of availability.
 
-Some metrics which notice problem are "rebalanced kafka rate" or "Kafka reported disk failure rate"
+Some metrics which notice problem are "rebalanced kafka rate" or "Kafka reported disk failure rate":
 
-image:rabalanced-kafka.png[Rebalanced Kafka rate]
+image:rebalanced-kafka.png[Rebalanced Kafka rate]
 
 image:kafka-reported-disk-fails.png[Kafka reported disk failure rate]
