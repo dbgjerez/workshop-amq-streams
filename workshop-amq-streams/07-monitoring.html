@@ -186,6 +186,20 @@
 </div>
 </div>
 <div class="sect1">
+<h2 id="_before_you_start"><a class="anchor" href="#_before_you_start"></a>Before you start</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We&#8217;r going to create a new namespace in order to use a blank environment for monitoring tasks. Execute the next following commands:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">OCP_NS=kafka
+oc new-project $OCP_NS</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_operators_installation"><a class="anchor" href="#_operators_installation"></a>Operators Installation</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -223,7 +237,7 @@ spec:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -f operator/operator-group-monitoring.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -f operator/operator-group-monitoring.yaml -n $OCP_NS</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -612,6 +626,45 @@ The password for the user admin is admin1234, however we encourage to review the
 </div>
 <div class="paragraph">
 <p>In this way you can review the information easely even you can create some alert if you need or you can create as much dashboard as you need following the same way that we shows in this laboratory.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_start_with_monitoring"><a class="anchor" href="#_how_start_with_monitoring"></a>How Start With Monitoring</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The monitoring process is the process to gather metrics about the operations involve with the system to ensure everything functions as expected to support applications and services.</p>
+</div>
+<div class="paragraph">
+<p>So, first we need to know what we need to verify in order to assure the propertly performance of our Kafka cluster. For that purpose we show you some metrics which you can use to monitoring the cluster.</p>
+</div>
+<div class="sect2">
+<h3 id="_performance_metrics"><a class="anchor" href="#_performance_metrics"></a>Performance Metrics</h3>
+<div class="paragraph">
+<p><span class="image"><img src="_images/kafka-cpu_memory.png" alt="Kafka Memory Resource Metrics"></span></p>
+</div>
+<div class="paragraph">
+<p>CPU and Memory resources are very critical metrics and it&#8217;s necessary ensure that the consumption of these resources is stable. On the other hand, if the consumption begins grow, maybe it means we need to scale up the number of instances in our cluster in order to reduce this.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/messages-consumed-monitoring.png" alt="Messages Consumed"></span></p>
+</div>
+<div class="paragraph">
+<p>The messages incoming is other performance metric which specify the capacity of the Kafka cluster to consume and produce messages. "Lag by Consumer Group" is an interesting metric refers to Kafka monitoring, since it notice that an problem maybe exist and we would to scale up out cluster.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_problem_indicator_metrics"><a class="anchor" href="#_problem_indicator_metrics"></a>Problem Indicator Metrics</h3>
+<div class="paragraph">
+<p>For other hand, some metrics specify that error exists in the cluster rather an performance problems. In that case a quick actuation is important in order to avoid severe problems or even loss of availability.</p>
+</div>
+<div class="paragraph">
+<p>Some metrics which notice problem are "rebalanced kafka rate" or "Kafka reported disk failure rate"</p>
+</div>
+<div class="paragraph">
+<p><span class="image unresolved"><img src="rabalanced-kafka.png" alt="Rebalanced Kafka rate"></span>
+<span class="image"><img src="_images/kafka-reported-disk-fails.png" alt="Kafka reported disk failure rate"></span></p>
+</div>
 </div>
 </div>
 </div>
